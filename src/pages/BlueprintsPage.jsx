@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import {
   deleteBlueprint,
   fetchAuthors,
@@ -11,6 +12,7 @@ import BlueprintCanvas from '../components/BlueprintCanvas.jsx'
 
 export default function BlueprintsPage() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { byAuthor, current, status, error } = useSelector((s) => s.blueprints)
   const topFive = useSelector(selectTopFiveBlueprintsByPoints)
   const [authorInput, setAuthorInput] = useState('')
@@ -40,6 +42,10 @@ export default function BlueprintsPage() {
     const confirmed = window.confirm(`Eliminar blueprint ${bp.author}/${bp.name}?`)
     if (!confirmed) return
     await dispatch(deleteBlueprint({ author: bp.author, name: bp.name }))
+  }
+
+  const goToUpdate = (bp) => {
+    navigate(`/blueprints/${encodeURIComponent(bp.author)}/${encodeURIComponent(bp.name)}`)
   }
 
   const retryCurrentAuthor = () => {
@@ -125,6 +131,9 @@ export default function BlueprintsPage() {
                       <td style={{ padding: '8px', borderBottom: '1px solid #1f2937' }}>
                         <button className="btn" onClick={() => openBlueprint(bp)}>
                           Open
+                        </button>
+                        <button className="btn" onClick={() => goToUpdate(bp)} style={{ marginLeft: 8 }}>
+                          Update
                         </button>
                         <button className="btn" onClick={() => deleteFromList(bp)} style={{ marginLeft: 8 }}>
                           Delete

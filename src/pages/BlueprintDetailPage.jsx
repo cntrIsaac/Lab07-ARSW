@@ -98,7 +98,7 @@ export default function BlueprintDetailPage() {
         {isAuthenticated() && (
           <div className="grid" style={{ marginTop: 12, gap: 10 }}>
             <p style={{ margin: 0, color: '#94a3b8' }}>
-              Haz clic en el canvas para agregar puntos y luego usa Save/Update.
+              Haz clic en el canvas para agregar puntos y luego usa Update.
             </p>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               <button
@@ -107,7 +107,7 @@ export default function BlueprintDetailPage() {
                 onClick={saveUpdate}
                 disabled={status.update === 'loading'}
               >
-                {status.update === 'loading' ? 'Guardando...' : 'Save/Update'}
+                {status.update === 'loading' ? 'Actualizando...' : 'Update'}
               </button>
               <button className="btn" type="button" onClick={clearDraft}>
                 Limpiar puntos
