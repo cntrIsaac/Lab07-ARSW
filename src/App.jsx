@@ -12,10 +12,15 @@ import {
   setRealtimeMode,
   subscribeRealtimeModeChanges,
 } from './services/realtimeModeStorage.js'
+import {
+  getSocketStatus,
+  onSocketStatusChange,
+} from './services/socketRealtime.js'
 
 export default function App() {
   const [authenticated, setAuthenticated] = useState(isAuthenticated())
   const [realtimeMode, setRealtimeModeState] = useState(getRealtimeMode())
+  const [socketStatus, setSocketStatus] = useState(getSocketStatus())
 
   useEffect(() => {
     return subscribeAuthChanges(() => {
@@ -29,8 +34,24 @@ export default function App() {
     })
   }, [])
 
+  useEffect(() => {
+    return onSocketStatusChange((status) => {
+      setSocketStatus(status)
+    })
+  }, [])
+
   const onRealtimeModeChange = (event) => {
     setRealtimeMode(event.target.value)
+  }
+
+  const getStatusColor = () => {
+    if (realtimeMode !== 'socketio') return null
+    return socketStatus === 'connected' ? '#4CAF50' : '#F44336'
+  }
+
+  const getStatusText = () => {
+    if (realtimeMode !== 'socketio') return null
+    return socketStatus === 'connected' ? '🟢 Conectado' : '🔴 Desconectado'
   }
 
   return (
@@ -53,6 +74,22 @@ export default function App() {
             <option value="socketio">RT: Socket.IO</option>
             <option value="stomp">RT: STOMP</option>
           </select>
+          {getStatusText() && (
+            <span
+              style={{
+                padding: '6px 12px',
+                borderRadius: '4px',
+                fontSize: '0.9rem',
+                backgroundColor: getStatusColor(),
+                color: 'white',
+                fontWeight: 'bold',
+                minWidth: '140px',
+                textAlign: 'center',
+              }}
+            >
+              {getStatusText()}
+            </span>
+          )}
           {!authenticated && <NavLink to="/login">Login</NavLink>}
           {authenticated && (
             <button className="btn" onClick={clearToken} type="button">

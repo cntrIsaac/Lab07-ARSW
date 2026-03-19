@@ -1,11 +1,28 @@
 import { io } from 'socket.io-client'
 
 let socket = null
+const statusListeners = new Set()
 
 const socketBaseUrl = import.meta.env.VITE_IO_BASE || 'http://localhost:3001'
 
 export function isSocketConnected() {
   return Boolean(socket?.connected)
+}
+
+export function getSocketStatus() {
+  if (!socket) return 'disconnected'
+  return socket.connected ? 'connected' : 'disconnected'
+}
+
+function notifyStatusChangeListeners() {
+  statusListeners.forEach((listener) => listener(getSocketStatus()))
+}
+
+export function onSocketStatusChange(handler) {
+  statusListeners.add(handler)
+  return () => {
+    statusListeners.delete(handler)
+  }
 }
 
 export function connectSocket() {
@@ -18,6 +35,18 @@ export function connectSocket() {
     autoConnect: true,
   })
 
+  socket.on('connect', () => {
+    notifyStatusChangeListeners()
+  })
+
+  socket.on('disconnect', () => {
+    notifyStatusChangeListeners()
+  })
+
+  socket.on('connect_error', (error) => {
+    notifyStatusChangeListeners()
+  })
+
   return socket
 }
 
@@ -25,6 +54,7 @@ export function disconnectSocket() {
   if (!socket) return
   socket.disconnect()
   socket = null
+  notifyStatusChangeListeners()
 }
 
 export function joinBlueprintRoom(author, name) {
