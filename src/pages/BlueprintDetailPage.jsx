@@ -9,6 +9,18 @@ import {
 } from '../features/blueprints/blueprintsSlice.js'
 import BlueprintCanvas from '../components/BlueprintCanvas.jsx'
 import { isAuthenticated } from '../services/authStorage.js'
+import {
+  connectSocket,
+  disconnectSocket,
+  emitDrawEvent,
+  joinBlueprintRoom,
+  onBlueprintUpdate,
+  onSocketError,
+} from '../services/socketRealtime.js'
+import {
+  getRealtimeMode,
+  subscribeRealtimeModeChanges,
+} from '../services/realtimeModeStorage.js'
 
 export default function BlueprintDetailPage() {
   const { author, name } = useParams()
@@ -17,6 +29,7 @@ export default function BlueprintDetailPage() {
   const { current: bp, status, error } = useSelector((s) => s.blueprints)
   const [draftPoints, setDraftPoints] = useState([])
   const [localError, setLocalError] = useState('')
+  const [realtimeMode, setRealtimeMode] = useState(getRealtimeMode())
 
   useEffect(() => {
     dispatch(fetchBlueprint({ author, name }))
@@ -26,9 +39,66 @@ export default function BlueprintDetailPage() {
     setDraftPoints(bp?.points || [])
   }, [bp])
 
+  useEffect(() => {
+    return subscribeRealtimeModeChanges(() => {
+      setRealtimeMode(getRealtimeMode())
+    })
+  }, [])
+
+  useEffect(() => {
+    if (!author || !name || realtimeMode !== 'socketio') {
+      return
+    }
+
+    const socket = connectSocket()
+    joinBlueprintRoom(author, name)
+
+    const unsubscribeUpdate = onBlueprintUpdate((payload) => {
+      if (!payload || payload.author !== author || payload.name !== name) {
+        return
+      }
+
+      if (!Array.isArray(payload.points)) {
+        return
+      }
+
+      setDraftPoints((prev) => {
+        if (!payload.points.length) {
+          return prev
+        }
+
+        if (payload.points.length > 1) {
+          return payload.points
+        }
+
+        const [incomingPoint] = payload.points
+        const last = prev[prev.length - 1]
+        if (last && last.x === incomingPoint.x && last.y === incomingPoint.y) {
+          return prev
+        }
+        return [...prev, incomingPoint]
+      })
+    })
+
+    const unsubscribeError = onSocketError(() => {
+      setLocalError('No se pudo conectar al canal en tiempo real (Socket.IO).')
+    })
+
+    return () => {
+      unsubscribeUpdate()
+      unsubscribeError()
+      if (socket) {
+        disconnectSocket()
+      }
+    }
+  }, [author, name, realtimeMode])
+
   const addDraftPoint = (point) => {
-    if (!isAuthenticated()) return
     setDraftPoints((prev) => [...prev, point])
+
+    if (realtimeMode === 'socketio') {
+      emitDrawEvent({ author, name, point })
+    }
   }
 
   const clearDraft = () => {
@@ -100,6 +170,11 @@ export default function BlueprintDetailPage() {
             <p style={{ margin: 0, color: '#94a3b8' }}>
               Haz clic en el canvas para agregar puntos y luego usa Update.
             </p>
+            {realtimeMode === 'socketio' && (
+              <p style={{ margin: 0, color: '#93c5fd' }}>
+                Socket.IO activo: los puntos se comparten en vivo en este plano.
+              </p>
+            )}
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               <button
                 className="btn primary"

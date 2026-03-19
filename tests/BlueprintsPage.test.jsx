@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { configureStore, createSlice } from '@reduxjs/toolkit'
+import { MemoryRouter } from 'react-router-dom'
 import BlueprintsPage from '../src/pages/BlueprintsPage.jsx'
 
 const emptyTopFive = []
@@ -47,9 +48,11 @@ describe('BlueprintsPage', () => {
     const store = makeStore()
     const spy = vi.spyOn(store, 'dispatch')
     render(
-      <Provider store={store}>
-        <BlueprintsPage />
-      </Provider>,
+      <MemoryRouter>
+        <Provider store={store}>
+          <BlueprintsPage />
+        </Provider>
+      </MemoryRouter>,
     )
 
     fireEvent.change(screen.getByPlaceholderText(/Author/i), { target: { value: 'JohnConnor' } })
