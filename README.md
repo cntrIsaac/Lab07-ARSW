@@ -92,6 +92,7 @@ La clave de este laboratorio es la **integración Socket.IO** que permite sincro
 - Node.js 16+
 - npm o yarn
 - Backend Socket.IO running en `http://localhost:3001`
+- Repositorio backend: https://github.com/cntrIsaac/BackEnd-Lab07ARSW
 
 ### Paso 1: Clonar e instalar dependencias
 
@@ -118,6 +119,9 @@ Debes tener un servidor Node.js corriendo en puerto 3001 con:
 - CORS habilitado
 - Endpoints REST CRUD
 - Socket.IO con eventos: `join-room`, `draw-event`, `blueprint-update`
+
+El backend que soporta este frontend se encuentra en:
+https://github.com/cntrIsaac/BackEnd-Lab07ARSW
 
 ---
 
