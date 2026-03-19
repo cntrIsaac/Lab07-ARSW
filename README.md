@@ -6,7 +6,7 @@ Este repositorio contiene la solución del **Laboratorio 7 de ARSW**: un cliente
 
 ---
 
-## 📋 Tabla de Contenidos
+## Tabla de Contenidos
 
 1. [Descripción General](#descripción-general)
 2. [Objetivos Alcanzados](#objetivos-alcanzados)
@@ -21,7 +21,7 @@ Este repositorio contiene la solución del **Laboratorio 7 de ARSW**: un cliente
 
 ---
 
-## 🎯 Descripción General
+## Descripción General
 
 **Lab P7 Blueprints Real-Time** es una Single Page Application (SPA) que permite a múltiples usuarios:
 
@@ -36,34 +36,34 @@ La clave de este laboratorio es la **integración Socket.IO** que permite sincro
 
 ---
 
-## ✅ Objetivos Alcanzados
+## Objetivos Alcanzados
 
 ### Parte 1: CRUD y Autenticación
-- ✅ GET /blueprints (listar todos)
-- ✅ GET /blueprints?author={author} (filtrar por autor)
-- ✅ GET /blueprints/:author/:name (detalle específico)
-- ✅ POST /blueprints (crear nuevo)
-- ✅ PUT /blueprints/:author/:name (actualizar)
-- ✅ DELETE /blueprints/:author/:name (eliminar)
-- ✅ POST /auth/login (autenticación JWT mock)
+- GET /blueprints (listar todos)
+- GET /blueprints?author={author} (filtrar por autor)
+- GET /blueprints/:author/:name (detalle específico)
+- POST /blueprints (crear nuevo)
+- PUT /blueprints/:author/:name (actualizar)
+- DELETE /blueprints/:author/:name (eliminar)
+- POST /auth/login (autenticación JWT mock)
 
 ### Parte 2: Tiempo Real con Socket.IO
-- ✅ Conexión WebSocket automática en modo Socket.IO
-- ✅ Unirse a "salas" por blueprint
-- ✅ Emitir eventos de dibujo
-- ✅ Escuchar actualizaciones en vivo
-- ✅ Deduplicación de puntos
-- ✅ Indicador visual de estado de conexión
+- Conexión WebSocket automática en modo Socket.IO
+- Unirse a "salas" por blueprint
+- Emitir eventos de dibujo
+- Escuchar actualizaciones en vivo
+- Deduplicación de puntos
+- Indicador visual de estado de conexión
 
 ### Parte 3: Tests y Documentación
-- ✅ 9+ tests unitarios (Vitest + Testing Library)
-- ✅ Tests específicos de Socket.IO
-- ✅ Tests de deduplicación
-- ✅ README completo
+- 9+ tests unitarios (Vitest + Testing Library)
+- Tests específicos de Socket.IO
+- Tests de deduplicación
+- README completo
 
 ---
 
-## 🛠 Stack Tecnológico
+## Stack Tecnológico
 
 ### Frontend
 - **React 18.2.0** - UI framework
@@ -85,7 +85,7 @@ La clave de este laboratorio es la **integración Socket.IO** que permite sincro
 
 ---
 
-## 💻 Instalación y Configuración
+## Instalación y Configuración
 
 ### Prerequisitos
 
@@ -115,13 +115,13 @@ VITE_IO_BASE=http://localhost:3001
 ### Paso 3: Backend Socket.IO (CRÍTICO)
 
 Debes tener un servidor Node.js corriendo en puerto 3001 con:
-- ✅ CORS habilitado
-- ✅ Endpoints REST CRUD
-- ✅ Socket.IO con eventos: `join-room`, `draw-event`, `blueprint-update`
+- CORS habilitado
+- Endpoints REST CRUD
+- Socket.IO con eventos: `join-room`, `draw-event`, `blueprint-update`
 
 ---
 
-## 🚀 Cómo Correr el Proyecto
+## Cómo Correr el Proyecto
 
 ### Desarrollo
 
@@ -142,8 +142,8 @@ Ejecuta 15+ tests:
 - Canvas tests (1)
 - Form tests (1)
 - BlueprintsPage tests (1)
-- **socketRealtime tests (6)** ⭐
-- **pointDeduplication tests (6)** ⭐
+- **socketRealtime tests (6)**
+- **pointDeduplication tests (6)**
 
 ### Linting
 
@@ -171,7 +171,7 @@ npm run dev
 
 ---
 
-## 🎨 Funcionalidades Principales
+## Funcionalidades Principales
 
 ### 1. Autenticación JWT Mock
 
@@ -205,12 +205,12 @@ Dos usuarios en el mismo blueprint ven actualizaciones en vivo.
 ### 7. Indicador de Conexión
 
 En el header:
-- 🟢 **Conectado** - WebSocket activo (en edición)
-- 🔴 **Desconectado** - Fuera de edición
+- **Conectado** - WebSocket activo (en edición)
+- **Desconectado** - Fuera de edición
 
 ---
 
-## 📋 Parte 1: CRUD REST
+## Parte 1: CRUD REST
 
 ### Endpoints
 
@@ -226,7 +226,7 @@ POST   /auth/login
 
 ---
 
-## 🔌 Parte 2: Integración Socket.IO
+## Parte 2: Integración Socket.IO
 
 ### Flujo
 
@@ -279,7 +279,7 @@ return [...prevPoints, incomingPoint]  // Nuevo
 
 ---
 
-## ✅ Tests y Validación
+## Tests y Validación
 
 ### socketRealtime.test.js (Nuevo)
 
@@ -308,7 +308,7 @@ Time       ~4s
 
 ---
 
-## 🎬 Guion de Demo (30-60 segundos)
+## Guion de Demo (30-60 segundos)
 
 ### Escenario: 2 Usuarios Colaborando
 
@@ -320,8 +320,8 @@ Tab B: http://localhost:5173
 
 **Paso 2: Seleccionar RT Mode**
 ```
-Tab A: Selector → "RT: Socket.IO"     ✓ Conectado 🟢
-Tab B: Selector → "RT: Socket.IO"     ✓ Conectado 🟢
+Tab A: Selector → "RT: Socket.IO"     Conectado
+Tab B: Selector → "RT: Socket.IO"     Conectado
 ```
 
 **Paso 3: Navegar al Mismo Blueprint**
@@ -334,23 +334,23 @@ Tab B: Blueprints → alice → Blueprint1 → Update
 ```
 Tab A: Click en Canvas (5 veces)
        → Puntos aparecen localmente
-       → Backend: ✓ draw-event recibido
-       → Backend: ✓ blueprint-update broadcasted
+  → Backend: draw-event recibido
+  → Backend: blueprint-update broadcasted
 
 Tab B: Observar Canvas
-       → Mismos puntos aparecen en tiempo real ✓
+  → Mismos puntos aparecen en tiempo real
 ```
 
 **Paso 5: Cambiar a None**
 ```
-Tab A: Selector → "RT: None" (Desconectado 🔴)
+Tab A: Selector → "RT: None" (Desconectado)
 Tab A: Click en Canvas
 Tab B: NO ve cambios (demostración que RT está desactivado)
 ```
 
 ---
 
-## 📝 Notas Importantes
+## Notas Importantes
 
 ### Backend CRÍTICO
 
@@ -374,7 +374,7 @@ Sebastian: SebasDuqueC
 
 ---
 
-## 📚 Estructura de Archivos
+## Estructura de Archivos
 
 ```
 src/
@@ -385,7 +385,7 @@ src/
 │   ├── LoginPage.jsx
 │   └── NotFound.jsx
 ├── services/
-│   ├── socketRealtime.js           (Socket.IO wrapper) ⭐
+│   ├── socketRealtime.js           (Socket.IO wrapper)
 │   ├── apiclient.js                (REST CRUD)
 │   ├── authStorage.js
 │   └── realtimeModeStorage.js
@@ -397,8 +397,8 @@ src/
     └── PrivateRoute.jsx
 
 tests/
-├── socketRealtime.test.js          ⭐
-├── pointDeduplication.test.js      ⭐
+├── socketRealtime.test.js
+├── pointDeduplication.test.js
 ├── blueprintsSlice.test.js
 ├── BlueprintCanvas.test.jsx
 ├── BlueprintForm.test.jsx
@@ -406,29 +406,4 @@ tests/
 ```
 
 ---
-
-## 🔄 Git Commits
-
-```
-✓ Lab07: CRUD REST + Auth
-✓ Lab07: Socket.IO integration + dedup
-✓ Lab07: State connection indicator
-✓ Lab07: Tests socketRealtime + deduplication
-✓ Lab07: README Documentation
-```
-
----
-
-## 🚄 Próximas Mejoras
-
-- [ ] STOMP alternativo
-- [ ] Reconexión automática
-- [ ] Error notifications
-- [ ] Collaborative cursors
-- [ ] TypeScript migration
-- [ ] Docker deployment
-
----
-
-**¡Happy coding! 🚀**
 
